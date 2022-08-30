@@ -32,6 +32,7 @@ Snack::Snack(string Name, int Price, int Count, int Weight)
 	}
 }
 
+// Получить информацию о батончике
 void Snack::getSnack()
 {
 	cout << endl;
@@ -41,65 +42,50 @@ void Snack::getSnack()
 	cout << "Вес батончика: " << weight << endl;
 }
 
-void Snack::addSnack(char choose, int addCount)
+void addSnack(Snack & that, int addCount)
 {
-	switch (choose)
+	if (addCount < 0)
 	{
-	case 'K':
-		count = count + addCount;
-		cout << endl << "Вы добавили " << addCount << " " << name << endl;
-		cout << endl << "Количество	" << name << " = " << count;
-		break;
+		addCount = -addCount;
+	}
+		int countOld = that.count;
+		that.count = that.count + addCount;
+		if (that.count > 10000)
+		{
+			cout << endl << " В автомат поместилось " << (10000 - countOld) << " ваших батончиков. Заберите оставшиеся " << -(10000 - that.count) << " " << that.name << endl;
+			that.count = 10000;
+		}
+		else
+		{
+			cout << endl << " Добавлено " << addCount << " " << that.name << endl;
+			cout << endl << " Количество " << that.name << " = " << that.count;
+		}
+}
 
-	case 'S':
-		count = count + addCount;
-		cout << endl << "Вы добавили " << addCount << " " << name << endl;
-		cout << endl << "Количество	" << name << " = " << count;
-		break;
-
-	case 'B':
-		count = count + addCount;
-		cout << endl << "Вы добавили " << addCount << " " << name << endl;
-		cout << endl << "Количество	" << name << " = " << count;
-		break;
-	
-	default:
-		cout <<endl << "У нас нет таких снеков" << endl;
+void buySnack(Snack& that, int buyCount)
+{
+	if (buyCount < 0)
+	{
+		buyCount = -buyCount;
+	}
+	if (that.count < buyCount)
+	{
+		cout << endl << " В автомате нет "<< buyCount <<" батончиков, вы можете купить " << that.count<< " " << that.name << endl;
+		addSnack(that, 50);
+	}
+	else
+	{
+		that.count = that.count - buyCount;
+		cout << endl << " Вы купили " << buyCount << " " << that.name << endl;
+		cout << endl << " Количество " << that.name << " = " << that.count;
+	}
+	if (that.count < 50)
+	{
+		addSnack(that, 100);
 	}
 }
 
-void Snack::buySnack(char choose, int buyCount)
-{
-	switch (choose)
-	{
-	case 'K':
-		count = count - buyCount;
-		cout << endl << "Вы купили " << buyCount << " " << name << " по цене " << buyCount*price << endl;
-		cout << endl << "Количество	" << name << " = " << count;
-		break;
-
-	case 'S':
-		count = count - buyCount;
-		cout << endl << "Вы купили " << buyCount << " " << name << " по цене " << buyCount * price << endl;
-		cout << endl << "Количество	" << name << " = " << count;
-		break;
-
-	case 'B':
-		count = count - buyCount;
-		cout << endl << "Вы купили " << buyCount << " " << name << " по цене " << buyCount*price << endl;
-		cout << endl << "Количество	" << name << " = " << count;
-		break;
-
-	default:
-		cout << endl << "У нас нет таких снеков" << endl;
-	}
-}
-
-
-
-
-
-
+//Задать вес батончика
 void Snack::setWeight(int Weight)
 {
 	if (Weight > 0)
@@ -147,14 +133,3 @@ int Snack::getPrice()
 	return price;
 }
 
-
-
-SellBox::SellBox()
-{
-
-}
-
-SellBox::~SellBox()
-{
-
-}
